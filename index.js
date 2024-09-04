@@ -6,6 +6,12 @@ require ('dotenv').config();
 // App Express
 const app =express();
 
+//db Config 
+
+require('./database/config').dbConnection();
+
+//Lectura y parseo del body
+app.use(express.json());
 
 // NODE SERVER  
 const server = require('http').createServer(app);
@@ -13,10 +19,13 @@ module.exports.io = require('socket.io')(server);
 require('./sockets/socket');
 
 
-
 // path publico 
 const publicPacth = path.resolve(__dirname,'public');
 app.use(express.static(publicPacth));
+
+
+// Rutas
+app.use('/api/login',require('./routes/auth'));
 
 
 server.listen(process.env.PORT,(err)=>{
